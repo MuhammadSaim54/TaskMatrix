@@ -1,4 +1,5 @@
-import { CheckCircle2, Clock, ListTodo, Sparkles } from "lucide-react";
+import { CheckCircle2, Clock, ListTodo } from "lucide-react";
+import Logo from "./logo"; // <-- Import Logo component
 
 export default function Header({ total, completed, pending }) {
   return (
@@ -8,15 +9,13 @@ export default function Header({ total, completed, pending }) {
         {/* Logo & Brand */}
         <div className="flex items-center justify-between sm:justify-start w-full sm:w-auto gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 border border-emerald-500/30 flex items-center justify-center shadow-lg shadow-emerald-500/10 shrink-0">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
-            </div>
+            <Logo className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 shadow-lg shadow-emerald-500/10" />
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">TaskMatrix</h1>
                 <span className="text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono font-semibold">PRO</span>
               </div>
-              <p className="text-[11px] sm:text-xs text-slate-400 font-mono">Next-Gen Workspace Matrix</p>
+              <p className="text-[11px] sm:text-xs text-slate-400 font-mono">Workspace Matrix</p>
             </div>
           </div>
         </div>

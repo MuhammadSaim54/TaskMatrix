@@ -1,16 +1,39 @@
-# React + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# TaskMatrix PRO 🚀
+### Next-Gen Workspace & Productivity Command Center
 
-Currently, two official plugins are available:
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-device&logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-Bundler-646CFF?style=flat-device&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38BDF8?style=flat-device&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-Animations-EF4444?style=flat-device&logo=framer&logoColor=white)](https://www.framer.com/motion/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](https://opensource.org/licenses/MIT)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+</div>
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 💎 Overview
 
-## Expanding the ESLint configuration
+**TaskMatrix Pro** is a high-end, enterprise-grade task management application engineered with a stunning **Obsidian & Emerald** aesthetic. Inspired by top-tier developer tools like Linear and Vercel, it features silky-smooth animations, live telemetry, keyboard navigation, and an immersive 3D cosmic background effect.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ✨ Key Features
+
+- **🌌 3D Cosmic Blackhole FX:** Interactive cursor-following gravity well powered by Framer Motion spring physics.
+- **📊 Live Telemetry & Progress Gauge:** Real-time calculation of active tasks, completion stats, and execution rates.
+- **⚡ Advanced Search & Filters:** Instant live keyword search combined with clean status filters (*All, Active, Completed*).
+- **⌨️ Pro Keyboard Shortcuts:** Press **`N`** anywhere on the dashboard to instantly trigger the task creation modal.
+- **💾 Local Storage Persistence:** Client-side state synchronization ensuring zero data loss across sessions.
+- **📱 Fully Responsive Layout:** Optimized mobile-first touch targets and fluid adaptive UI containers.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend Library:** React (Vite)
+- **Styling:** Tailwind CSS v4 (PostCSS)
+- **Animations:** Framer Motion
+- **Icons:** Lucide React
+- **Storage:** Custom `useLocalStorage` React Hook

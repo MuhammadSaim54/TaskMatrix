@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "./components/Header";
 import TaskModal from "./components/TaskModal";
@@ -18,6 +18,7 @@ export default function App() {
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Keyboard shortcut listener ('N' key)
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key.toLowerCase() === 'n' && document.activeElement.tagName !== 'INPUT') {
@@ -29,21 +30,37 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleAddTask = (newTask) => setTasks([newTask, ...tasks]);
-  const toggleTask = (id) => setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
-  const deleteTask = (id) => setTasks(tasks.filter(t => t.id !== id));
+  // Memoized Handlers to prevent unnecessary re-renders
+  const handleAddTask = useCallback((newTask) => {
+    setTasks(prev => [newTask, ...prev]);
+  }, [setTasks]);
 
-  const filteredTasks = tasks.filter(t => {
-    const matchesSearch = t.title.toLowerCase().includes(searchQuery.toLowerCase());
-    if (filter === "active") return !t.completed && matchesSearch;
-    if (filter === "completed") return t.completed && matchesSearch;
-    return matchesSearch;
-  });
+  const toggleTask = useCallback((id) => {
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+  }, [setTasks]);
 
-  const total = tasks.length;
-  const completed = tasks.filter(t => t.completed).length;
-  const pending = total - completed;
-  const completionPercentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+  const deleteTask = useCallback((id) => {
+    setTasks(prev => prev.filter(t => t.id !== id));
+  }, [setTasks]);
+
+  // Memoized Filtering & Search Calculation (Prevents heavy re-calculation on every render)
+  const filteredTasks = useMemo(() => {
+    return tasks.filter(t => {
+      const matchesSearch = t.title.toLowerCase().includes(searchQuery.toLowerCase());
+      if (filter === "active") return !t.completed && matchesSearch;
+      if (filter === "completed") return t.completed && matchesSearch;
+      return matchesSearch;
+    });
+  }, [tasks, filter, searchQuery]);
+
+  // Memoized Metrics Calculations
+  const { total, completed, pending, completionPercentage } = useMemo(() => {
+    const totalCount = tasks.length;
+    const completedCount = tasks.filter(t => t.completed).length;
+    const pendingCount = totalCount - completedCount;
+    const percentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+    return { total: totalCount, completed: completedCount, pending: pendingCount, completionPercentage: percentage };
+  }, [tasks]);
 
   return (
     <div className="min-h-screen bg-[#030712] text-white flex flex-col font-sans selection:bg-emerald-500/30 selection:text-emerald-300 relative overflow-hidden">
@@ -106,19 +123,29 @@ export default function App() {
             </div>
 
             <div className="flex items-center justify-between gap-3 w-full">
-              <div className="flex items-center gap-1 bg-[#070b14]/90 backdrop-blur-md border border-white/[0.08] p-1 rounded-xl flex-1">
-                {['all', 'active', 'completed'].map((f) => (
-                  <button
-                    key={f}
-                    onClick={() => setFilter(f)}
-                    className={`flex-1 py-1.5 text-center rounded-lg text-xs font-mono capitalize transition-all cursor-pointer ${filter === f
-                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-sm'
-                        : 'text-slate-400 hover:text-white'
+              {/* Smooth Sliding Filter Pills */}
+              <div className="flex items-center gap-1 bg-[#070b14]/90 backdrop-blur-md border border-white/[0.08] p-1 rounded-xl flex-1 relative">
+                {['all', 'active', 'completed'].map((f) => {
+                  const isActive = filter === f;
+                  return (
+                    <button
+                      key={f}
+                      onClick={() => setFilter(f)}
+                      className={`relative flex-1 py-1.5 text-center rounded-lg text-xs font-mono capitalize transition-colors cursor-pointer z-10 ${
+                        isActive ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white'
                       }`}
-                  >
-                    {f}
-                  </button>
-                ))}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeFilterPill"
+                          className="absolute inset-0 bg-emerald-500/20 border border-emerald-500/30 rounded-lg shadow-sm z-[-1]"
+                          transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                        />
+                      )}
+                      {f}
+                    </button>
+                  );
+                })}
               </div>
 
               <button
@@ -170,12 +197,13 @@ export default function App() {
                           {task.title}
                         </h4>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border ${task.priority === 'High'
+                          <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border ${
+                            task.priority === 'High'
                               ? 'bg-red-500/10 text-red-400 border-red-500/20'
                               : task.priority === 'Medium'
                                 ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
                                 : 'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                            }`}>
+                          }`}>
                             {task.priority}
                           </span>
                           {task.createdAt && (
